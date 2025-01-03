@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Trip</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #f0f2f5;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 250px;
+            background-color: #007bff;
+            padding-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s, padding-left 0.3s;
+        }
+
+        .sidebar a i {
+            margin-right: 10px;
+        }
+
+        .sidebar a:hover {
+            background-color: #007bff;
+            padding-left: 30px;
+        }
+
+        .sidebar .navbar-brand {
+            font-size: 1.5rem;
+            padding: 15px 20px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .sidebar a:hover .navbar-brand {
+            padding-left: 30px;
+        }
+
+        .main-content {
+            margin-left: 270px;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #007bff;
+        }
+
+        .form-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            border-radius: 5px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+
+<!-- Sidebar -->
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <a class="navbar-brand" th:href="@{/index}">
+        <i class="fas fa-bus-alt"></i> Elvis Travel
+    </a>
+    <a th:href="@{/trips}">
+        <i class="fas fa-cogs"></i> Dashboard
+    </a>
+    <a th:href="@{/trips/create}" sec:authorize="hasRole('ADMIN')">
+        <i class="fas fa-plus-circle"></i> Krijo Udhetim
+    </a>
+    <a th:href="@{/users}" sec:authorize="hasRole('ADMIN')">
+        <i class="fas fa-users"></i> Shiko Userat
+    </a>
+    <a th:href="@{/trips/allTrips}" sec:authorize="hasRole('ADMIN')">
+        <i class="fas fa-business-time"></i> Shiko Udhetimet
+    </a>
+
+    <a th:href="@{/myTickets}" sec:authorize="isAuthenticated()">
+        <i class="fas fa-ticket-alt"></i> Biletat e prera
+    </a>
+    <a th:href="@{/kontakt}">
+        <i class="fas fa-envelope"></i> Kontakt
+    </a>
+    <a th:href="@{/rrethNesh}">
+        <i class="fas fa-info-circle"></i> Rreth nesh
+    </a>
+    <a th:href="@{/logout}" sec:authorize="isAuthenticated()">
+        <i class="fa-solid fa-arrow-right"></i> Logout
+    </a>
+    <a th:href="@{/rregullorja}">
+        <i class="fa-solid fa-scale-balanced"></i> Rregullorja
+    </a>
+    <a th:href="@{/destinacione}">
+        <i class="fa-solid fa-map"></i> Destination
+    </a>
+</div>
+
+<!-- Main content -->
+<div class="main-content">
+    <h2>Krijo Udhetim te ri</h2>
+
+    <form action="/trips/admin/uploadTrips" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="file">Upload Excel File</label>
+            <input type="file" name="file" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-success">Upload</button>
+    </form>
+    <div class="form-container">
+        <div th:if="${error}" class="alert alert-danger">
+            <span th:text="${error}"></span>
+        </div>
+
+        <form th:action="@{/trips/create}" th:object="${trip}" method="post">
+            <div class="form-group">
+                <label for="busId" class="control-label">Bus</label>
+                <select class="form-control" id="busId" name="busId" required>
+                    <option th:each="bus : ${buses}" th:value="${bus.id}" th:text="${bus.name}"></option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="departureDate" class="control-label">Data e nisjes</label>
+                <input type="date" class="form-control" id="departureDate" th:field="*{departureDate}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="origin" class="control-label">Nisja</label>
+                <input type="text" class="form-control" id="origin" th:field="*{origin}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="destination" class="control-label">Destinacion</label>
+                <input type="text" class="form-control" id="destination" th:field="*{destination}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="departureTime" class="control-label">Koha e nisjes</label>
+                <select class="form-control" id="departureTime" th:field="*{departureTime}" required>
+                    <option value="5:00AM">05:00AM</option>
+                    <option value="5:30AM">05:30AM</option>
+                    <option value="6:00AM">06:00AM</option>
+                    <option value="6:30AM">06:30AM</option>
+                    <option value="7:00AM">07:00AM</option>
+                    <option value="7:30AM">07:30AM</option>
+                    <option value="8:00AM">08:00AM</option>
+                    <option value="8:30AM">08:30AM</option>
+                    <option value="9:00AM">09:00AM</option>
+                    <option value="9:30AM">09:30AM</option>
+                    <option value="10:00AM">10:00AM</option>
+                    <option value="10:30AM">10:30AM</option>
+                    <option value="11:00AM">11:00AM</option>
+                    <option value="11:30AM">11:30AM</option>
+                    <option value="12:00PM">12:00PM</option>
+
+                    <!-- PM Times -->
+                    <option value="12:30PM">12:30PM</option>
+                    <option value="1:00PM">01:00PM</option>
+                    <option value="1:30PM">01:30PM</option>
+                    <option value="2:00PM">02:00PM</option>
+                    <option value="2:30PM">02:30PM</option>
+                    <option value="3:00PM">03:00PM</option>
+                    <option value="3:30PM">03:30PM</option>
+                    <option value="4:00PM">04:00PM</option>
+                    <option value="4:30PM">04:30PM</option>
+                    <option value="5:00PM">05:00PM</option>
+                    <option value="5:30PM">05:30PM</option>
+                    <option value="6:00PM">06:00PM</option>
+                    <option value="6:30PM">06:30PM</option>
+                    <option value="7:00PM">07:00PM</option>
+                    <option value="7:30PM">07:30PM</option>
+                    <option value="8:00PM">08:00PM</option>
+                    <option value="8:30PM">08:30PM</option>
+                    <option value="9:00PM">09:00PM</option>
+                    <option value="9:30PM">09:30PM</option>
+                    <option value="10:00PM">10:00PM</option>
+                    <option value="10:30PM">10:30PM</option>
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Krijo Udhetimin</button>
+                <a th:href="@{/trips}" class="btn btn-secondary">Anullo</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

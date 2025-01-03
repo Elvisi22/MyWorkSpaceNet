@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elvis Travel</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Global Styles */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Navbar */
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #007bff;
+        }
+
+        /* Search Section */
+        .search-section {
+            align-content: center;
+            padding: 40px 0;
+            background-color: #ffffff;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-search {
+            align-content: center;
+            padding: 20px;
+            border-radius: 15px;
+            background-color: #d7e5fc;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+
+        .form-control, .btn-primary {
+            align-content: center;
+            padding: 5px;
+            font-size: 0.9rem;
+            border-radius: 8px;
+        }
+
+        label {
+            font-size: 0.9rem;
+            margin-bottom: 3px;
+        }
+        /* Hero Carousel */
+        .hero {
+            position: relative;
+            height: 50vh;
+            overflow: hidden;
+        }
+        .carousel-item {
+            height: 50vh;
+            background-size: cover;
+            background-position: center;
+        }
+        .carousel-caption {
+            bottom: 25%;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            color: #fff;
+        }
+        .carousel-caption h1 {
+            font-size: 2.5rem;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 60px 0;
+        }
+        .feature-item {
+            transition: transform 0.3s;
+        }
+        .feature-item:hover {
+            transform: scale(1.05);
+        }
+        .feature-icon {
+            font-size: 3rem;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #007bff;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .search-section {
+            padding: 2rem 0; /* Add padding to the section */
+        }
+
+        .form-search .form-control {
+            text-align: center; /* Center text inside input fields */
+        }
+        .feature-item a {
+            text-decoration: none; /* Removes underline */
+            color: inherit; /* Ensures the link uses the text color */
+        }
+
+        .feature-item a:hover {
+            color: #007bff; /* Optional: Change the color on hover */
+            text-decoration: none; /* Ensures underline doesn't appear on hover */
+        }
+
+        .footer-link {
+            text-decoration: none;
+            color: inherit; /* Makes the link inherit the text color from the surrounding content */
+        }
+
+        .footer-link:hover {
+            color:black/* Optional: Add a hover effect if desired */
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/index}">Elvis Travel</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" th:href="@{/login}">Login</a>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/trips}">Dashboard</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/logout}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Search Section -->
+<section class="search-section text-center">
+    <div class="container">
+        <h2>Kerkoni Destinacionin Tuaj</h2>
+        <form th:action="@{/trips/searchTrips}" method="get" class="form-search mt-4">
+            <div class="row justify-content-center">
+                <div class="col-md-2 mb-3">
+                    <label for="adults" style="font-size: 0.9rem;">Nisja</label>
+                    <input type="text" name="origin" list="originOptions" class="form-control" placeholder="Enter Origin" required>
+                    <datalist id="originOptions">
+                        <option value="Belsh">
+                        <option value="Divjakë">
+                        <option value="Durres">
+                        <option value="Elbasan">
+                        <option value="Fier">
+                        <option value="Kavajë">
+                        <option value="Lezhë">
+                        <option value="Lushnjë">
+                        <option value="Peqin">
+                        <option value="Rrogozhinë">
+                        <option value="Shkodër">
+                        <option value="Tiranë">
+
+                    </datalist>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <label for="adults" style="font-size: 0.9rem;">Destinacion</label>
+                    <input type="text" name="destination" list="destinationOptions"  class="form-control" placeholder="Enter Destination" required>
+                    <datalist id="destinationOptions">
+                        <option value="Alessandria">
+                        <option value="Ancona">
+                        <option value="Asti">
+                        <option value="Bergamo">
+                        <option value="Bologna">
+                        <option value="Brescia">
+                        <option value="Cesalto">
+                        <option value="Cesena">
+                        <option value="Cuneo">
+                        <option value="Desenzano">
+                        <option value="Faenza">
+                        <option value="Fiorenzola">
+                        <option value="Forli">
+                        <option value="Frata">
+                        <option value="Imola">
+                        <option value="Lodi">
+                        <option value="Milano">
+                        <option value="Modena">
+                        <option value="Padova">
+                        <option value="Parma">
+                        <option value="Pesaro">
+                        <option value="Pavia">
+                        <option value="Piacenza">
+                        <option value="Regio Emilia">
+                        <option value="Ricione">
+                        <option value="Rimini">
+                        <option value="Saluzzo">
+                        <option value="Savigliano">
+                        <option value="Sebino">
+                        <option value="Sinegallia">
+                        <option value="Torino">
+                        <option value="Trieste">
+                        <option value="Udine">
+                        <option value="Venezia">
+                        <option value="Verona">
+                        <option value="Vicenza">
+                    </datalist>
+                </div>
+                <div class="col-md-1 mb-3">
+                    <label for="adults" style="font-size: 0.9rem;">Adults</label>
+                    <input type="number" id="adults" name="adults" min="0" value="1" class="form-control" style="padding: 5px; font-size: 0.9rem;">
+                </div>
+                <div class="col-md-1 mb-3">
+                    <label for="children" style="font-size: 0.9rem;">Children</label>
+                    <input type="number" id="children" name="children" min="0" value="0" class="form-control" style="padding: 5px; font-size: 0.9rem;">
+                </div>
+                <div class="col-md-1 mb-3">
+                    <label for="infants" style="font-size: 0.9rem;">Infants</label>
+                    <input type="number" id="infants" name="infants" min="0" value="0" class="form-control" style="padding: 5px; font-size: 0.9rem;">
+                </div>
+                <div class="col-md-2 mb-3">
+                    <label style="font-size: 0.9rem;"></label>
+                    <button type="submit" class="btn btn-primary w-100" style="padding: 5px 0; font-size: 0.9rem;">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+
+<!-- Hero Carousel -->
+<div id="heroCarousel" class="carousel slide hero" data-bs-ride="carousel" data-bs-interval="3000">
+    <div class="carousel-inner">
+        <div class="carousel-item active" style="background-image: url('https://images.unsplash.com/photo-1638711101765-adfeca9ec8aa?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&fit=crop');">
+            <div class="carousel-caption">
+                <h1>Welcome to Elvis Travel</h1>
+                <p>Travel with peace of mind!</p>
+            </div>
+        </div>
+        <div class="carousel-item" style="background-image: url('https://images.unsplash.com/photo-1697360655787-5e0cf647e774?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&fit=crop');">
+            <div class="carousel-caption">
+                <h1>Behu Klient Besnik</h1>
+                <p>Rrezervo rrugen tende online</p>
+                <p>Paisu me kartele klienti</p>
+                <p>Udheto i sigurt cdo here</p>
+            </div>
+        </div>
+        <div class="carousel-item" style="background-image: url('https://images.unsplash.com/photo-1645715313009-e78b76ac77d1?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&fit=crop');">
+            <div class="carousel-caption">
+                <h1>Behu Agjensi Partnere</h1>
+                <p>Paisu me user perdorues</p>
+                <p>Preneto dhe rezervo online</p>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<!-- Features Section -->
+<div class="container features">
+    <div class="row text-center">
+        <div class="col-md-3 feature-item">
+            <a href="/destinacione">
+                <div class="feature-icon"><i class="fas fa-plane-departure"></i></div>
+                <h3>Destinacione</h3>
+            </a>
+        </div>
+        <div class="col-md-3 feature-item">
+            <a href="/rregullorja">
+                <div class="feature-icon"><i class="fas fa-bus"></i></div>
+                <h3>Rregullorja</h3>
+            </a>
+        </div>
+        <div class="col-md-3 feature-item">
+            <a href="/rrethNesh">
+                <div class="feature-icon"><i class="fas fa-info-circle"></i></div>
+                <h3>Rreth Nesh</h3>
+                 </a> </div> <div class="col-md-3 feature-item"> <a href="/kontakt"> <div class="feature-icon"><i class="fas fa-phone"></i></div> <h3>Kontakt</h3> </a> </div> </div>
+
+</div> <!-- Footer --> <div class="footer">
+    <p>&copy; 2024 Elvis Travel. All rights reserved Powered By
+        <a href="https://linkedin.com/in/elvis-barjami-938447223" class="footer-link">Elvis B</a>.
+    </p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script> </body> </html>

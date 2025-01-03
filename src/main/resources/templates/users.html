@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Container adjustments */
+        .container {
+            margin-top: 30px;
+            margin-left: 480px; /* Ensure enough space from the sidebar */
+            max-width: 900px;
+            margin-right: auto; /* Align container in the center */
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        table {
+            margin-top: 20px;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        td {
+            vertical-align: middle;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 250px;
+            background-color: #007bff;
+            padding-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s, padding-left 0.3s;
+        }
+
+        .sidebar a i {
+            margin-right: 10px;
+        }
+
+        .sidebar a:hover {
+            background-color: #007bff;
+            padding-left: 30px;
+        }
+
+        .sidebar .navbar-brand {
+            font-size: 1.5rem;
+            padding: 15px 20px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .sidebar a:hover .navbar-brand {
+            padding-left: 30px;
+        }
+
+        /* Form adjustments */
+        .form-search {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-control {
+            border-radius: 10px;
+        }
+        .btn-primary {
+            border-radius: 10px;
+        }
+        .row .col-md-4, .row .col-md-3 {
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        /* Adjust table layout */
+        .table {
+            width: 100%;
+            background-color: #fff;
+        }
+
+        .table th, .table td {
+            text-align: center;
+
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <a class="navbar-brand" th:href="@{/index}">
+        <i class="fas fa-bus-alt"></i> Elvis Travel
+    </a>
+    <a th:href="@{/trips}">
+        <i class="fas fa-road"></i> Dashboard
+    </a>
+    <a th:href="@{/kontakt}">
+        <i class="fas fa-envelope"></i> Kontakt
+    </a>
+    <a th:href="@{/rrethNesh}">
+        <i class="fas fa-info-circle"></i> Rreth Nesh
+    </a>
+    <a th:href="@{/logout}">
+        <i class="fa-solid fa-arrow-right"></i> Logout
+    </a>
+    <a th:href="@{/rregullorja}">
+        <i class="fa-solid fa-scale-balanced"></i> Rregullorja
+    </a>
+    <a th:href="@{/destinacione}">
+        <i class="fa-solid fa-map"></i> Destination
+    </a>
+</div>
+<!-- Main content -->
+<div class="container">
+    <div class="row">
+        <h1>Userat ne sistem</h1>
+    </div>
+
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th>Emer</th>
+            <th>Mbiemer</th>
+            <th>Email</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.firstName}"></td>
+            <td th:text="${user.lastName}"></td>
+            <td th:text="${user.email}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

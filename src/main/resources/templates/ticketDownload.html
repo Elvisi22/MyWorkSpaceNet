@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Download</title>
+</head>
+<body>
+<h1>Your Ticket is Being Processed</h1>
+<p>Please wait while your ticket is being downloaded...</p>
+
+<script>
+    // Decode the Base64 PDF bytes and create a blob
+    const pdfBytes = atob('${pdfBytes}'); // Decode Base64 to binary
+    const byteNumbers = new Uint8Array(pdfBytes.length);
+    for (let i = 0; i < pdfBytes.length; i++) {
+        byteNumbers[i] = pdfBytes.charCodeAt(i);
+    }
+    const blob = new Blob([byteNumbers], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+
+    // Create a link element
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'ticket.pdf'; // File name for the downloaded ticket
+    document.body.appendChild(link);
+
+    // Programmatically click the link to trigger the download
+    link.click();
+
+    // Cleanup
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    // Redirect to myTickets after a short delay
+    setTimeout(() => {
+        window.location.href = '/myTickets'; // Adjust this to your actual myTickets URL
+    }, 3000); // Redirect after 3 seconds
+</script>
+</body>
+</html>
