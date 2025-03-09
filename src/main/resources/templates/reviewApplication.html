@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Job Application</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: #fff;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            padding-top: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 12px 20px;
+            font-size: 16px;
+            color: #333;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .sidebar a i {
+            margin-right: 10px;
+        }
+
+        .sidebar a:hover {
+            background: #007bff;
+            color: white;
+        }
+
+        /* Main content area */
+        .content {
+            margin-left: 270px; /* Adjusted to prevent overlap with sidebar */
+            padding: 20px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .application-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .application-card:hover {
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .application-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .application-info {
+            font-size: 14px;
+            color: #777;
+        }
+
+        .application-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .btn-accept {
+            background-color: #28a745;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.3s ease-in-out;
+        }
+
+        .btn-accept:hover {
+            background-color: #218838;
+        }
+
+        .btn-reject {
+            background-color: #dc3545;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.3s ease-in-out;
+        }
+
+        .btn-reject:hover {
+            background-color: #c82333;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="sidebar">
+    <a th:href="@{/job/create}" sec:authorize="hasRole('USER')"><i class="fas fa-plus-circle"></i> Post a Job</a>
+    <a th:href="@{/job/alljobs}"><i class="fas fa-briefcase"></i> View Jobs</a>
+    <a th:href="@{/applications/my}"><i class="fas fa-file-alt"></i> Job Applications</a>
+    <a th:href="@{/users}" sec:authorize="hasRole('ADMIN')"><i class="fas fa-user"></i> Users</a>
+    <a th:href="@{/profile}"><i class="fas fa-user"></i> My Profile</a>
+    <a th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+</div>
+
+
+<div class="content">
+    <h2 class="mb-4">Review Job Application</h2>
+
+
+    <div class="application-card">
+        <div>
+            <h4 th:text="${reviewApplication.job.title}" class="application-title"></h4>
+        </div>
+        <div class="application-info">
+            <p><strong>Applicant:</strong> <span th:text="${reviewApplication.user.name}"></span></p>
+            <p><strong>Email:</strong> <span th:text="${reviewApplication.user.email}"></span></p>
+            <p><strong>Resume:</strong> <a th:href="${reviewApplication.resume}" target="_blank">View Resume</a></p>
+            <p><strong>Cover Letter:</strong></p>
+            <p th:text="${reviewApplication.coverLetter}"></p>
+        </div>
+
+
+        <div class="application-actions">
+
+            <form th:action="@{/applications/review/{applicationId}/update(applicationId=${reviewApplication.id})}" method="post">
+                <input type="hidden" name="status" value="ACCEPTED">
+                <button type="submit" class="btn-accept">Accept</button>
+            </form>
+
+
+            <form th:action="@{/applications/review/{applicationId}/update(applicationId=${reviewApplication.id})}" method="post">
+                <input type="hidden" name="status" value="REJECTED">
+                <button type="submit" class="btn-reject">Reject</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -32,37 +32,28 @@ public class SpringSecurity {
                         authorize // Allow public access to the registration and login pages
                                 .requestMatchers("/", "/static/**", "/css/**", "/js/**").permitAll()
                                 .requestMatchers("/index").permitAll()
-                                .requestMatchers("/register/**").hasRole("ADMIN")
+                                .requestMatchers("/register/**").permitAll()
                                 .requestMatchers("/login").permitAll()
-                                .requestMatchers("/rrethNesh").permitAll()
-                                .requestMatchers("kontakt").permitAll()
-                                .requestMatchers("/trips").authenticated()
-                                .requestMatchers("/myTickets").authenticated()
-                                .requestMatchers("/tripForm").authenticated()
-                                .requestMatchers("/downloadTicket/**").authenticated()
-                                .requestMatchers("/allTickets").authenticated()
-                                .requestMatchers("/trips/allTrips").hasRole("ADMIN")
-                                .requestMatchers("/ticketsForTrip/**").hasRole("ADMIN")
-                                .requestMatchers("/buses/create").hasRole("ADMIN")
-                                .requestMatchers("/buses/create").hasRole("ADMIN")
-                                .requestMatchers("/usersTickets").hasRole("ADMIN")
-                                .requestMatchers("/usersTickets/searchTickets").hasRole("ADMIN")
-                                .requestMatchers("/trips/admin/uploadTrips").hasRole("ADMIN")
 
+                                .requestMatchers("/job/create").hasRole("USER")
+                                .requestMatchers("/job/**").authenticated()
+                                .requestMatchers("/applications/job/**").authenticated()
+                                .requestMatchers("/applications/job/create").hasRole("USER")
+                                .requestMatchers("/applications/apply/**").authenticated()
+                                .requestMatchers("/applications/review/**").authenticated()
+                                .requestMatchers("/applications/my").authenticated()
+                                .requestMatchers("/applications/delete/**").authenticated()
+                                .requestMatchers("/profile").authenticated()
+                                .requestMatchers("/update/**").authenticated()
+                                .requestMatchers("/index").authenticated()
 
-                                .requestMatchers("/destinacione").permitAll()
-                                .requestMatchers("/rregullorja").permitAll()
-                                // Allow logged-in users to access booking pages and trips
-                                .requestMatchers("/trips/**").permitAll()
-                                .requestMatchers("/trips/searchTrips").permitAll()
-                                .requestMatchers("/bookTicket/**").authenticated() // Ensure you include any other booking-related paths
                                 .requestMatchers("/successPage").authenticated()
-                                .requestMatchers("/users").hasRole("ADMIN") // Admin access
+                                .requestMatchers("/users").hasRole("ADMIN")
                 ).formLogin(
                         form -> form
                                 .loginPage("/login")
                                 .loginProcessingUrl("/login")
-                                .defaultSuccessUrl("/trips")
+                                .defaultSuccessUrl("/index")
                                 .permitAll()
                 ).logout(
                         logout -> logout

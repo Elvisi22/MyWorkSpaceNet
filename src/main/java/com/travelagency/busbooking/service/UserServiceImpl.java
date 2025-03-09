@@ -32,10 +32,9 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setName(userDto.getFirstName() + " " + userDto.getLastName());
         user.setEmail(userDto.getEmail());
-        // encrypt the password using spring security
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
-        Role role = roleRepository.findByName("ROLE_USER");
+        Role role = roleRepository.findByName("ROLE_JOBSEEKER");
         if(role == null){
             role = checkRoleExist();
         }
@@ -67,7 +66,25 @@ public class UserServiceImpl implements UserService {
 
     private Role checkRoleExist(){
         Role role = new Role();
-        role.setName("ROLE_USER");
+        role.setName("ROLE_JOBSEEKER");
         return roleRepository.save(role);
+    }
+
+
+    public void updateUser(Long userId, UserDto userDto) {
+        // Fetch the user by ID
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        // Update user fields
+        user.setName(userDto.getFirstName() + " " + userDto.getLastName());
+        user.setEmail(userDto.getEmail());
+
+
+        if (userDto.getPassword() != null && !userDto.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        }
+
+        userRepository.save(user);
     }
 }

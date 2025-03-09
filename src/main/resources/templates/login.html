@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Elvis Travel</title>
+    <title>Login</title>
     <!-- Bootstrap CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <!-- Font Awesome CDN -->
@@ -80,48 +80,48 @@
 
 
 <br><br>
-<!-- Login Form -->
+
 <div class="container">
     <div class="card">
         <div class="card-header">
             <a th:href="@{/index}" style="text-decoration: none; color: inherit;">
-                <i class="fas fa-bus"></i> Elvis Travel
+                <i class="fa-brands fa-hive"></i> MyWorkSpace
             </a>
         </div>
 
         <div class="card-body">
             <form method="post" th:action="@{/login}" class="form-horizontal">
-                <!-- Alerts -->
+
                 <div th:if="${param.error}" class="alert alert-danger text-center">Invalid Email or Password</div>
                 <div th:if="${param.logout}" class="alert alert-success text-center">You have been logged out.</div>
 
-                <!-- Email -->
+
                 <div class="form-group">
                     <label for="username" class="form-label">Email</label>
                     <input type="text" id="username" name="username" class="form-control" placeholder="Enter email address">
                 </div>
 
-                <!-- Password -->
+
                 <div class="form-group">
                     <label for="password" class="form-label">Password</label>
                     <input type="password" id="password" name="password" class="form-control" placeholder="Enter password">
                 </div>
 
-                <!-- Submit -->
+
                 <div class="form-group d-grid">
                     <button type="submit" class="btn btn-primary btn-block">Login</button>
                 </div>
 
-                <!-- Signup Link -->
+
             </form>
         </div>
     </div>
 </div>
 
-<!-- Footer -->
-<div class="footer">
-    &copy; 2024 Elvis Travel. All Rights Reserved.
-</div>
+<a th:href="@{/register}" class="footer">
+    Don't have an account? Register here.
+</a>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-ZVP8yK+0K9jyQhKcNqKFTN5RpYJqScD9KFl0nd3aSoI/WZ8UZtMwCAEVFzZ5FQ0zY" crossorigin="anonymous"></script>
 </body>

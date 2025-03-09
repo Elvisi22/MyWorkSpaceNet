@@ -3,28 +3,28 @@ package com.travelagency.busbooking.controller;
 import com.travelagency.busbooking.dto.UserDto;
 import com.travelagency.busbooking.entity.User;
 import com.travelagency.busbooking.service.UserService;
+import com.travelagency.busbooking.service.UserServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
 public class AuthController {
 
     private UserService userService;
+    private UserServiceImpl userServiceimp;
 
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService , UserServiceImpl userServiceimp) {
         this.userService = userService;
-    }
-
-    @GetMapping("/index")
-    public String home(){
-        return "index";
+        this.userServiceimp = userServiceimp;
     }
 
     @GetMapping("login")
@@ -32,7 +32,11 @@ public class AuthController {
         return "login";
     }
 
-    // handler method to handle user registration request
+    @GetMapping("/index")
+    public String indexpage(){
+        return "index";
+    }
+
     @GetMapping("register")
     public String showRegistrationForm(Model model){
         UserDto user = new UserDto();
@@ -40,7 +44,6 @@ public class AuthController {
         return "register";
     }
 
-    // handler method to handle register user form submit request
     @PostMapping("/register/save")
     public String registration(@Valid @ModelAttribute("user") UserDto user,
                                BindingResult result,
@@ -54,7 +57,7 @@ public class AuthController {
             return "register";
         }
         userService.saveUser(user);
-        return "redirect:/register?success";
+        return "redirect:/login";
     }
 
     @GetMapping("/users")
@@ -64,31 +67,30 @@ public class AuthController {
         return "users";
     }
 
-    @GetMapping("/rregullorja")
-    public String rregullorja(){
-        return "rregullorja";
+    @GetMapping("/profile")
+    public String showUpdateForm(Model model , Principal principal) {
+        // Fetch the user and convert to DTO for pre-filling the form
+        String email = principal.getName();
+        User user = userService.findUserByEmail(email);
+        UserDto userDto = new UserDto();
+        String[] str = user.getName().split(" ");
+        userDto.setFirstName(str[0]);
+        userDto.setLastName(str[1]);
+        userDto.setEmail(user.getEmail());
+
+        model.addAttribute("userDto", userDto);
+        model.addAttribute("userId", user.getId());
+        return "updateForm";
     }
 
-    @GetMapping("/destinacione")
-    public String destinacione(){
-        return "destinacionet";
+
+    @PostMapping("/update/{userId}")
+    public String updateUser(@PathVariable Long userId, @ModelAttribute UserDto userDto) {
+        // Call the service to update the user details
+        userServiceimp.updateUser(userId, userDto);
+        return "redirect:/index";  // Redirect to a page displaying the user list or profile
     }
 
-    @GetMapping("/kontakt")
-    public String kontakt(){
-        return "kontakt";
-    }
-
-    @GetMapping("/rrethNesh")
-    public String rrethNesh()
-    {
-        return "aboutUs";
-    }
-
-    @GetMapping("/tripForm")
-    public String createTrip(){
-        return "tripForm"
-;    }
 
 
 

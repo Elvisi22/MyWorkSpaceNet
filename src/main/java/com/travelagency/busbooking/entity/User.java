@@ -1,5 +1,6 @@
 package com.travelagency.busbooking.entity;
 
+import com.travelagency.busbooking.enums.UserPosition;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -42,6 +43,12 @@ public class User implements UserDetails
             inverseJoinColumns={@JoinColumn(name="ROLE_ID", referencedColumnName="ID")})
     private List<Role> roles = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    private UserPosition position;
+
+    @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL , orphanRemoval = true)
+    private List<Job> jobs = new ArrayList<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -70,5 +77,13 @@ public class User implements UserDetails
     @Override
     public boolean isEnabled() {
         return false;
+    }
+
+    public UserPosition getPosition() {
+        return position;
+    }
+
+    public void setPosition(UserPosition position) {
+        this.position = position;
     }
 }
