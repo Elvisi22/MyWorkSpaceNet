@@ -41,6 +41,7 @@ public class SpringSecurity {
                                 .requestMatchers("/applications/job/create").hasRole("USER")
                                 .requestMatchers("/applications/apply/**").authenticated()
                                 .requestMatchers("/applications/review/**").authenticated()
+                                .requestMatchers("/applications/resume/**").authenticated()
                                 .requestMatchers("/applications/my").authenticated()
                                 .requestMatchers("/applications/delete/**").authenticated()
                                 .requestMatchers("/profile").authenticated()

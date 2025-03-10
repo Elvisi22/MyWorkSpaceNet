@@ -10,11 +10,17 @@ import com.travelagency.busbooking.service.JobService;
 import com.travelagency.busbooking.service.UserService;
 import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -44,15 +50,17 @@ public class JobApplicationController {
 
     @PostMapping("/apply")
     public String applyForJob(@RequestParam("jobId") Long jobId,
-                              @RequestParam("resume") String resume,
+                              @RequestParam("resume") MultipartFile resumeFile,
                               @RequestParam("coverLetter") String coverLetter,
-                              Principal principal) {
-        String email = principal.getName();
-        User applicant = userService.findUserByEmail(email);
+                              Principal principal) throws IOException {
+        User applicant = userService.findUserByEmail(principal.getName());
         Job job = jobService.getJobById(jobId);
-        jobApplicationService.applyForJob(applicant, job, resume, coverLetter);
-        return "redirect:/job/alljobs";
+
+        jobApplicationService.applyForJob(applicant, job, resumeFile, coverLetter);
+
+        return "redirect:/applications/my"; // Redirect to user’s applications
     }
+
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<JobApplication>> getApplicationsByUser(@PathVariable Long userId) {
@@ -99,5 +107,19 @@ public class JobApplicationController {
         jobApplicationService.deleteMyApplication(applicationId);
         return "user-applications";
 
+    }
+
+    @GetMapping("/resume/{id}")
+    public ResponseEntity<Resource> downloadResume(@PathVariable Long id) {
+        // Retrieve the JobApplication from the database
+        JobApplication application = jobApplicationService.findById(id);
+
+        // Create a resource from the resume byte array
+        ByteArrayResource resource = new ByteArrayResource(application.getResume());
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=resume.pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(resource);
     }
 }

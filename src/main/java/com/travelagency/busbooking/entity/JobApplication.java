@@ -22,8 +22,8 @@ public class JobApplication {
     @ManyToOne
     @JoinColumn(name = "job_id", nullable = false)
     private Job job;
-
-    private String resume;
+    @Lob
+    private byte[] resume;
     private String coverLetter;
     private ApplicationStatus applicationStatus;
     private LocalDateTime appliedAt = LocalDateTime.now();

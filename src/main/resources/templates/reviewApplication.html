@@ -153,7 +153,12 @@
         <div class="application-info">
             <p><strong>Applicant:</strong> <span th:text="${reviewApplication.user.name}"></span></p>
             <p><strong>Email:</strong> <span th:text="${reviewApplication.user.email}"></span></p>
-            <p><strong>Resume:</strong> <a th:href="${reviewApplication.resume}" target="_blank">View Resume</a></p>
+            <p class="mb-2">
+                <strong>Resume:</strong>
+                <a th:href="@{/applications/resume/{id}(id=${reviewApplication.id})}" target="_blank" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-file-pdf"></i> View Resume
+                </a>
+            </p>
             <p><strong>Cover Letter:</strong></p>
             <p th:text="${reviewApplication.coverLetter}"></p>
         </div>

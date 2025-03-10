@@ -26,12 +26,12 @@
 <div class="container">
   <h2 class="text-center mb-4">Apply for Job</h2>
   <h4 class="text-center" th:text="${job.title}"></h4>
-  <form th:action="@{/applications/apply}" method="post">
+  <form th:action="@{/applications/apply}" method="post" enctype="multipart/form-data">
     <input type="hidden" name="jobId" th:value="${job.id}">
 
     <div class="mb-3">
-      <label class="form-label">Resume (URL)</label>
-      <input type="text" class="form-control" name="resume" placeholder="Enter your resume link" required>
+      <label >Upload Resume (PDF only):</label>
+      <input type="file" name="resume" accept=".pdf" required />
     </div>
     <div class="mb-3">
       <label class="form-label">Cover Letter</label>

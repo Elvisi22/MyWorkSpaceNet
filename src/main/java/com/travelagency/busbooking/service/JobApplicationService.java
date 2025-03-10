@@ -9,7 +9,9 @@ import com.travelagency.busbooking.repository.JobRepository;
 import com.travelagency.busbooking.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -25,15 +27,26 @@ public class JobApplicationService {
         this.jobRepository = jobRepository;
     }
 
-    public JobApplication applyForJob(User applicant, Job job, String resume, String coverLetter) {
+//    public JobApplication applyForJob(User applicant, Job job, String resume, String coverLetter) {
+////        JobApplication jobApplication = new JobApplication();
+////        jobApplication.setUser(applicant);
+////        jobApplication.setJob(job);
+////        jobApplication.setResume(resume);
+////        jobApplication.setCoverLetter(coverLetter);
+////        jobApplication.setApplicationStatus(ApplicationStatus.PENDING);
+////        return jobApplicationRepository.save(jobApplication);
+////    }
+
+    public JobApplication applyForJob(User applicant, Job job, MultipartFile resumeFile, String coverLetter) throws IOException {
         JobApplication jobApplication = new JobApplication();
         jobApplication.setUser(applicant);
         jobApplication.setJob(job);
-        jobApplication.setResume(resume);
+        jobApplication.setResume(resumeFile.getBytes()); // Convert PDF to byte array
         jobApplication.setCoverLetter(coverLetter);
         jobApplication.setApplicationStatus(ApplicationStatus.PENDING);
         return jobApplicationRepository.save(jobApplication);
     }
+
 
     public List<JobApplication> getApplicationsForJob(Long jobId) {
         return jobApplicationRepository.findAll(); // Ideally, filter by jobId
@@ -65,5 +78,9 @@ public class JobApplicationService {
         return "deleted";
     }
 
+    public JobApplication findById(Long id) {
+        return jobApplicationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Application not found"));
+    }
 
 }
