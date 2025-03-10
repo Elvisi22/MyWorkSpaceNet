@@ -7,10 +7,7 @@ import com.travelagency.busbooking.service.UserServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -89,6 +86,13 @@ public class AuthController {
         // Call the service to update the user details
         userServiceimp.updateUser(userId, userDto);
         return "redirect:/index";  // Redirect to a page displaying the user list or profile
+    }
+
+
+    @GetMapping("/user/delete/{id}")
+    public String deleteUser(@PathVariable("id") Long id) {
+        userServiceimp.deleteUserById(id);
+        return "redirect:/users";
     }
 
 
