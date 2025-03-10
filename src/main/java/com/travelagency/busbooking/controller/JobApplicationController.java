@@ -58,7 +58,7 @@ public class JobApplicationController {
 
         jobApplicationService.applyForJob(applicant, job, resumeFile, coverLetter);
 
-        return "redirect:/applications/my"; // Redirect to user’s applications
+        return "redirect:/applications/my";
     }
 
 
@@ -111,10 +111,10 @@ public class JobApplicationController {
 
     @GetMapping("/resume/{id}")
     public ResponseEntity<Resource> downloadResume(@PathVariable Long id) {
-        // Retrieve the JobApplication from the database
+
         JobApplication application = jobApplicationService.findById(id);
 
-        // Create a resource from the resume byte array
+
         ByteArrayResource resource = new ByteArrayResource(application.getResume());
 
         return ResponseEntity.ok()
